@@ -36,12 +36,38 @@ h1{text-align:center;margin:8px 0 10px;font-size:32px;color:#0b5c75}
 }
 .next:hover,.start:hover{background:#08495d}
 .hidden{display:none}
-#resultScreen{position:relative;overflow:hidden;border-radius:20px;padding:28px;background:linear-gradient(rgba(255,255,255,.90),rgba(255,255,255,.93)),url('equipe_mv.jpeg') center/cover no-repeat;}
+#resultScreen{
+  position:fixed; inset:0; z-index:50; overflow:hidden;
+  border-radius:0; padding:24px;
+  background-image:url('equipe_mv.jpeg');
+  background-position:center top; background-size:cover; background-repeat:no-repeat;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+#resultScreen:before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.02) 45%,rgba(0,0,0,.08) 62%,rgba(0,0,0,.20) 100%);
+  z-index:1;
+}
+.resultPanel{
+  position:relative; z-index:2; width:min(680px,100%);
+  background:rgba(255,255,255,.94); backdrop-filter:blur(5px);
+  border-radius:24px; padding:22px 26px 24px;
+  box-shadow:0 14px 40px rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.8);
+}
 #resultScreen h1,#resultScreen .logo,#resultScreen .score,#resultScreen .result,#resultScreen button{position:relative;z-index:2}
-#resultScreen:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,92,117,.12),rgba(255,255,255,.30));z-index:1}
-.score{text-align:center;font-size:58px;font-weight:bold;color:#0b5c75;margin:20px}
+#resultScreen h1{margin:6px 0 4px}
+.score{text-align:center;font-size:58px;font-weight:bold;color:#0b5c75;margin:10px}
 .result{text-align:center;font-size:19px;line-height:1.5}
 .small{text-align:center;color:#74848a;font-size:13px;margin-top:18px}
+@media (max-width:600px){
+  #resultScreen{padding:14px; background-position:center top;}
+  .resultPanel{border-radius:20px; padding:18px 16px 18px;}
+  #resultScreen h1{font-size:27px;}
+  .score{font-size:50px;margin:7px;}
+  .result{font-size:17px;}
+  .resultPanel .start{margin-top:10px;padding:14px;font-size:16px;}
+}
 </style>
 </head>
 <body>
@@ -63,11 +89,13 @@ h1{text-align:center;margin:8px 0 10px;font-size:32px;color:#0b5c75}
   </div>
 
   <div id="resultScreen" class="hidden">
-    <div class="logo">RESULTADO</div>
-    <h1>Fim do desafio! 🎉</h1>
-    <div class="score" id="score"></div>
-    <div class="result" id="message"></div>
-    <button class="start" onclick="restart()">JOGAR NOVAMENTE</button>
+    <div class="resultPanel">
+      <div class="logo">RESULTADO</div>
+      <h1>Fim do desafio! 🎉</h1>
+      <div class="score" id="score"></div>
+      <div class="result" id="message"></div>
+      <button class="start" onclick="restart()">JOGAR NOVAMENTE</button>
+    </div>
   </div>
 </div>
 
