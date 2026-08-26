@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Quiz da Equipe MV</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0b5c75,#1687a7);padding:20px;color:#17313b}.card{width:min(680px,100%);background:#fff;border-radius:24px;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.25)}.logo{font-size:14px;font-weight:bold;letter-spacing:1px;text-align:center;color:#1687a7}h1{text-align:center;margin:8px 0 10px;font-size:32px;color:#0b5c75}.subtitle{text-align:center;color:#64747a;margin-bottom:25px}.progress{height:9px;background:#e8eef0;border-radius:99px;overflow:hidden;margin-bottom:24px}.progress span{display:block;height:100%;background:#1687a7;width:0%;transition:.3s}.question{font-size:21px;font-weight:bold;line-height:1.4;margin-bottom:20px}.option{width:100%;text-align:left;padding:16px 18px;margin:10px 0;border:2px solid #dce6e9;border-radius:14px;background:#fff;cursor:pointer;font-size:16px;transition:.2s}.option:hover{border-color:#1687a7;background:#f4fbfd}.option:disabled{cursor:default}.correct{background:#e7f8ed!important;border-color:#28a85b!important}.wrong{background:#fff0f0!important;border-color:#dc4b4b!important}.next,.start{width:100%;border:0;border-radius:14px;padding:16px;margin-top:15px;background:#0b5c75;color:#fff;font-weight:bold;font-size:17px;cursor:pointer}.next:hover,.start:hover{background:#08495d}.hidden{display:none!important}
+#resultScreen{position:fixed;inset:0;z-index:9999;padding:10px;background:#17313b;display:none;align-items:center;justify-content:center;overflow:auto}
+#resultScreen.show{display:flex}
+.resultScreenContent{width:100%;max-width:900px;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.resultPhoto{display:block;width:auto;max-width:96vw;height:auto;max-height:78vh;object-fit:contain;border-radius:16px;flex:0 1 auto}
+.resultPanel{width:180px;background:rgba(255,255,255,.97);border-radius:8px;padding:3px 6px 4px;box-shadow:0 4px 12px rgba(0,0,0,.2);flex:0 0 auto}
+.resultPanel .logo{font-size:6px;margin:0}
+.resultPanel h1{font-size:9px;margin:1px 0}
+.score{text-align:center;font-size:13px;font-weight:bold;color:#0b5c75;margin:1px}
+.result{text-align:center;font-size:7px;line-height:1.1}
+.resultPanel .start{padding:4px 6px;margin-top:3px;font-size:7px;border-radius:7px}
+.small{text-align:center;color:#74848a;font-size:13px;margin-top:12px}
+@media(max-width:600px){
+  #resultScreen{
+    position:fixed;
+    left:0;right:0;top:0;bottom:0;
+    width:100%;
+    height:100%;
+    min-height:0;
+    padding:5px;
+    overflow:hidden;
+    display:none;
+    background:#17313b;
+  }
+  #resultScreen.show{display:block}
+  .resultScreenContent{
+    position:absolute;
+    left:0;right:0;top:0;bottom:0;
+    width:100%;
+    height:100%;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+  }
+  .resultPhoto{
+    display:block;
+    width:96vw;
+    max-width:96vw;
+    height:auto;
+    max-height:calc(100vh - 95px);
+    object-fit:contain;
+    border-radius:10px;
+    flex:none;
+  }
+  .resultPanel{
+    width:125px;
+    max-width:35vw;
+    flex:none;
+    border-radius:6px;
+    padding:2px 4px 3px;
+    background:rgba(255,255,255,.97);
+  }
+  .resultPanel .logo{font-size:5px}
+  .resultPanel h1{font-size:8px;margin:1px 0}
+  .score{font-size:12px}
+  .result{font-size:6px;line-height:1.05}
+  .resultPanel .start{padding:3px 4px;margin-top:3px;font-size:6px}
+}
+</style></head>
+<body>
+<div class="card"><section id="startScreen"><div class="logo">EQUIPE MV • DESAFIO</div><h1>Quiz da Equipe MV</h1><p class="subtitle">Será que você conhece bem a nossa equipe?</p><button type="button" class="start" id="startButton">COMEÇAR O QUIZ 🚀</button><p class="small">8 perguntas • 3 alternativas • 1 resposta correta</p></section><section id="quizScreen" class="hidden"><div class="logo" id="counter"></div><div class="progress"><span id="bar"></span></div><div class="question" id="question"></div><div id="options"></div><button type="button" id="next" class="next hidden">PRÓXIMA PERGUNTA →</button></section></div>
+<section id="resultScreen" aria-hidden="true"><div class="resultScreenContent"><img class="resultPhoto" src="equipe_mv.jpeg" alt="Equipe MV"><div class="resultPanel"><div class="logo">RESULTADO</div><h1>Fim do desafio! 🎉</h1><div class="score" id="score"></div><div class="result" id="message"></div><button type="button" class="start" id="restartButton">JOGAR NOVAMENTE</button></div></div></section>
+<script>
+const questions=[
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Produtos relacionados a drogas e medicamentos, quem procurar?",a:["Alex Poatan","Marina Kruger","Gildisnei"],c:1},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Questões Assistenciais, quem procurar?",a:["Vin Diesel","Paula Fernandes","Gabriel Machado"],c:2},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Atendimento e Leitos, quem procurar?",a:["Fred Mercuri Prateado","Bruna Islabão","Padre Fabio de Melo"],c:1},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Faturamento, qual dupla procurar?",a:["Cilene e Jonas","Cesar Menotti e Fabiano","Henrique e Juliano"],c:0},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de CMH, CME e Almoxarifado, quem procurar?",a:["James Hetfield","Armandinho","Felipe Anthony"],c:2},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Laboratório e exames, quem procurar?",a:["Paola Oliveira","Thalita Borges","Miley Cirus"],c:1},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre o Cadastro de Nutrição e Almoxarifado, quem procurar?",a:["Mateus Souza","Patati e Patata","Luan Santana"],c:0},
+{q:"Durante o processo de Cadastramento, caso seja necessário falar sobre as configurações do sistema, quem procurar?",a:["Stephen Hawking","João Lucas","Elon Musk"],c:1}];
+let current=0,score=0,answered=false;
+const startScreen=document.getElementById('startScreen'),quizScreen=document.getElementById('quizScreen'),resultScreen=document.getElementById('resultScreen'),startButton=document.getElementById('startButton'),restartButton=document.getElementById('restartButton'),nextButton=document.getElementById('next');
+function startQuiz(){current=0;score=0;startScreen.classList.add('hidden');quizScreen.classList.remove('hidden');resultScreen.classList.remove('show');resultScreen.setAttribute('aria-hidden','true');showQuestion()}
+function showQuestion(){answered=false;const x=questions[current];document.getElementById('counter').textContent=`PERGUNTA ${current+1} DE ${questions.length}`;document.getElementById('bar').style.width=`${current/questions.length*100}%`;document.getElementById('question').textContent=x.q;const box=document.getElementById('options');box.innerHTML='';x.a.forEach((text,i)=>{const b=document.createElement('button');b.type='button';b.className='option';b.textContent=`${String.fromCharCode(65+i)} — ${text}`;b.addEventListener('click',()=>answer(i,b));box.appendChild(b)});nextButton.classList.add('hidden')}
+function answer(i,clicked){if(answered)return;answered=true;const x=questions[current];document.querySelectorAll('.option').forEach((b,n)=>{b.disabled=true;if(n===x.c)b.classList.add('correct')});if(i===x.c)score++;else clicked.classList.add('wrong');document.getElementById('bar').style.width=`${(current+1)/questions.length*100}%`;nextButton.classList.remove('hidden')}
+function nextQuestion(){if(!answered)return;if(current<questions.length-1){current++;showQuestion()}else finish()}
+function finish(){quizScreen.classList.add('hidden');document.querySelector('.card').classList.add('result-hidden');resultScreen.classList.add('show');resultScreen.setAttribute('aria-hidden','false');document.getElementById('score').textContent=`${score} / ${questions.length}`;let msg=score===8?"🏆 Você conhece MUITO bem a Equipe MV!<br>Parabéns, gabaritou!":score>=6?"⭐ Mandou muito bem! Você conhece bastante a nossa equipe.":score>=4?"👍 Bom trabalho! Você já conhece bem a equipe, mas ainda pode melhorar.":"😄 Parece que está na hora de conhecer melhor a Equipe MV!";document.getElementById('message').innerHTML=msg}
+function restart(){resultScreen.classList.remove('show');document.querySelector('.card').classList.remove('result-hidden');startQuiz()}
+startButton.addEventListener('click',startQuiz);nextButton.addEventListener('click',nextQuestion);restartButton.addEventListener('click',restart);
+window.addEventListener('DOMContentLoaded',()=>{startScreen.classList.remove('hidden');quizScreen.classList.add('hidden');resultScreen.classList.remove('show');resultScreen.setAttribute('aria-hidden','true')})
+;window.addEventListener('load',()=>{
+  const photo=document.querySelector('.resultPhoto');
+  if(photo){
+    photo.addEventListener('load',()=>{
+      if(window.innerWidth<=600){
+        photo.style.maxHeight=(window.innerHeight-95)+'px';
+        photo.style.maxWidth='96vw';
+        photo.style.width='96vw';
+        photo.style.height='auto';
+      }
+    });
+  }
+});
+;window.addEventListener('resize',()=>{
+  const photo=document.querySelector('.resultPhoto');
+  if(photo && window.innerWidth<=600){
+    photo.style.maxHeight=(window.innerHeight-95)+'px';
+  }
+});;
+</script></body></html>
