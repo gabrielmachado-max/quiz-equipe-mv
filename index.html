@@ -5,27 +5,30 @@
 <title>Quiz da Equipe MV</title>
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0b5c75,#1687a7);padding:20px;color:#17313b}.card{width:min(680px,100%);background:#fff;border-radius:24px;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.25)}.logo{font-size:14px;font-weight:bold;letter-spacing:1px;text-align:center;color:#1687a7}h1{text-align:center;margin:8px 0 10px;font-size:32px;color:#0b5c75}.subtitle{text-align:center;color:#64747a;margin-bottom:25px}.progress{height:9px;background:#e8eef0;border-radius:99px;overflow:hidden;margin-bottom:24px}.progress span{display:block;height:100%;background:#1687a7;width:0%;transition:.3s}.question{font-size:21px;font-weight:bold;line-height:1.4;margin-bottom:20px}.option{width:100%;text-align:left;padding:16px 18px;margin:10px 0;border:2px solid #dce6e9;border-radius:14px;background:#fff;cursor:pointer;font-size:16px;transition:.2s}.option:hover{border-color:#1687a7;background:#f4fbfd}.option:disabled{cursor:default}.correct{background:#e7f8ed!important;border-color:#28a85b!important}.wrong{background:#fff0f0!important;border-color:#dc4b4b!important}.next,.start{width:100%;border:0;border-radius:14px;padding:16px;margin-top:15px;background:#0b5c75;color:#fff;font-weight:bold;font-size:17px;cursor:pointer}.next:hover,.start:hover{background:#08495d}.hidden{display:none!important}
-#resultScreen{position:fixed;inset:0;z-index:9999;padding:12px;background:#17313b;display:none;align-items:center;justify-content:center;overflow:auto}
+#resultScreen{position:fixed;inset:0;z-index:9999;padding:10px;background:#17313b;display:none;align-items:center;justify-content:center;overflow:auto}
 #resultScreen.show{display:flex}
-.resultScreenContent{width:min(900px,100%);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-.resultPhoto{position:relative;display:block;width:min(820px,96vw);height:auto;max-height:78vh;object-fit:contain;border-radius:16px;z-index:1;flex:0 1 auto}
-.resultShade{display:none}
-.card.result-hidden{display:none!important}
-#resultScreen:before{display:none}
-.resultPanel{position:relative;z-index:2;width:min(180px,32vw);background:rgba(255,255,255,.96);border-radius:8px;padding:3px 6px 4px;box-shadow:0 4px 12px rgba(0,0,0,.20);order:2;flex:0 0 auto}
+.resultScreenContent{width:100%;max-width:900px;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.resultPhoto{display:block;width:auto;max-width:96vw;height:auto;max-height:78vh;object-fit:contain;border-radius:16px;flex:0 1 auto}
+.resultPanel{width:180px;background:rgba(255,255,255,.97);border-radius:8px;padding:3px 6px 4px;box-shadow:0 4px 12px rgba(0,0,0,.2);flex:0 0 auto}
 .resultPanel .logo{font-size:6px;margin:0}
-.resultPanel h1{font-size:9px;margin:1px 0 1px}
+.resultPanel h1{font-size:9px;margin:1px 0}
 .score{text-align:center;font-size:13px;font-weight:bold;color:#0b5c75;margin:1px}
 .result{text-align:center;font-size:7px;line-height:1.1}
 .resultPanel .start{padding:4px 6px;margin-top:3px;font-size:7px;border-radius:7px}
 .small{text-align:center;color:#74848a;font-size:13px;margin-top:12px}
 @media(max-width:600px){
-body{padding:12px}.card{padding:20px;border-radius:20px}h1{font-size:28px}.question{font-size:19px}
-#resultScreen{padding:8px}.resultScreenContent{gap:6px}
-.resultPhoto{width:96vw;max-height:76vh;border-radius:12px}
-.resultPanel{width:150px;max-width:34vw;border-radius:7px;padding:2px 5px 3px}
-.resultPanel .logo{font-size:5px}.resultPanel h1{font-size:8px}.score{font-size:12px}.result{font-size:6px}.resultPanel .start{padding:3px 5px;margin-top:3px;font-size:6px}
-}</style></head>
+  #resultScreen{position:fixed;inset:0;padding:6px;min-height:100dvh;height:100dvh;overflow:hidden}
+  #resultScreen.show{display:flex}
+  .resultScreenContent{width:100%;height:100%;min-height:0;gap:5px;justify-content:center}
+  .resultPhoto{display:block;width:auto;max-width:96vw;max-height:calc(100dvh - 105px);height:auto;object-fit:contain;border-radius:10px}
+  .resultPanel{width:125px;max-width:35vw;border-radius:6px;padding:2px 4px 3px}
+  .resultPanel .logo{font-size:5px}
+  .resultPanel h1{font-size:8px;margin:1px 0}
+  .score{font-size:12px}
+  .result{font-size:6px;line-height:1.05}
+  .resultPanel .start{padding:3px 4px;margin-top:3px;font-size:6px}
+}
+</style></head>
 <body>
 <div class="card"><section id="startScreen"><div class="logo">EQUIPE MV • DESAFIO</div><h1>Quiz da Equipe MV</h1><p class="subtitle">Será que você conhece bem a nossa equipe?</p><button type="button" class="start" id="startButton">COMEÇAR O QUIZ 🚀</button><p class="small">8 perguntas • 3 alternativas • 1 resposta correta</p></section><section id="quizScreen" class="hidden"><div class="logo" id="counter"></div><div class="progress"><span id="bar"></span></div><div class="question" id="question"></div><div id="options"></div><button type="button" id="next" class="next hidden">PRÓXIMA PERGUNTA →</button></section></div>
 <section id="resultScreen" aria-hidden="true"><div class="resultScreenContent"><img class="resultPhoto" src="equipe_mv.jpeg" alt="Equipe MV"><div class="resultPanel"><div class="logo">RESULTADO</div><h1>Fim do desafio! 🎉</h1><div class="score" id="score"></div><div class="result" id="message"></div><button type="button" class="start" id="restartButton">JOGAR NOVAMENTE</button></div></div></section>
