@@ -36,6 +36,9 @@ h1{text-align:center;margin:8px 0 10px;font-size:32px;color:#0b5c75}
 }
 .next:hover,.start:hover{background:#08495d}
 .hidden{display:none}
+#resultScreen{position:relative;overflow:hidden;border-radius:20px;padding:28px;background:linear-gradient(rgba(255,255,255,.90),rgba(255,255,255,.93)),url('equipe_mv.jpeg') center/cover no-repeat;}
+#resultScreen h1,#resultScreen .logo,#resultScreen .score,#resultScreen .result,#resultScreen button{position:relative;z-index:2}
+#resultScreen:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,92,117,.12),rgba(255,255,255,.30));z-index:1}
 .score{text-align:center;font-size:58px;font-weight:bold;color:#0b5c75;margin:20px}
 .result{text-align:center;font-size:19px;line-height:1.5}
 .small{text-align:center;color:#74848a;font-size:13px;margin-top:18px}
